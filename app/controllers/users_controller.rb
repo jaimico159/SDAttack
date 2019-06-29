@@ -62,10 +62,10 @@ class UsersController < ApplicationController
     end
   end
 
-  def search_user
+  def search_user_by_iris
   end
 
-  def match
+  def match_by_iris
     result = params[:iris]
     img1 = Magick::Image.from_blob(result.read).first
     total = 0
@@ -75,12 +75,26 @@ class UsersController < ApplicationController
       #img2 = Magick::Image.read("http://localhost:3000#{Rails.application.routes.url_helpers.rails_blob_path(@user.iris, only_path: true)}").first
       total = compare(img1, img2)
       puts total
-      puts total
-      puts total
-      puts total
       ((@user = u) && break) if total < 0.00001 
     end
 
+    respond_to do |format|
+      if @user.present?
+        format.html { redirect_to @user, notice: 'User was successfully found.' }
+        format.json { render :show, status: :created, location: @user }
+      else
+        format.html { redirect_to :users_search, notice: 'User not found.' }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def search_user_by_dni
+  end
+
+  def match_by_dni
+    dni = params[:dni]
+    @user = User.find_by(dni: dni)
     respond_to do |format|
       if @user.present?
         format.html { redirect_to @user, notice: 'User was successfully found.' }
