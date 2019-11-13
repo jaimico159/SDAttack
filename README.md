@@ -4,4 +4,6 @@ You should run
 
 ```rails db:create```
 ```rails db:seed```
-```rails s```
+```rails server```
+
+We Need To Do SOme Extra Changes to The Repository
